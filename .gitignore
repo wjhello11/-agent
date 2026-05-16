@@ -17,6 +17,10 @@ audit.log
 scripts/*_report.json
 scripts/agent_test_report.md
 
+# Large demo/test artifacts
+test/resources/
+docs/project_documentation.pdf
+
 # Python caches
 __pycache__/
 *.py[cod]
