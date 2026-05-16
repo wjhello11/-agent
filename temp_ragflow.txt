@@ -1,0 +1,161 @@
+﻿import requests
+import sys
+from config.logger import setup_logging
+from plugins_func.register import register_function, ToolType, ActionResponse, Action
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from core.connection import ConnectionHandler
+
+TAG = __name__
+logger = setup_logging()
+
+# 瀹氫箟鍩虹鐨勫嚱鏁版弿杩版ā鏉?SEARCH_FROM_RAGFLOW_FUNCTION_DESC = {
+    "type": "function",
+    "function": {
+        "name": "search_from_ragflow",
+        "description": "浠庣煡璇嗗簱涓煡璇俊鎭?,
+        "parameters": {
+            "type": "object",
+            "properties": {"question": {"type": "string", "description": "鏌ヨ鐨勯棶棰?}},
+            "required": ["question"],
+        },
+    },
+}
+
+
+@register_function(
+    "search_from_ragflow", SEARCH_FROM_RAGFLOW_FUNCTION_DESC, ToolType.SYSTEM_CTL
+)
+def search_from_ragflow(conn: "ConnectionHandler", question=None):
+    # 纭繚瀛楃涓插弬鏁版纭鐞嗙紪鐮?    if question and isinstance(question, str):
+        # 纭繚闂鍙傛暟鏄疷TF-8缂栫爜鐨勫瓧绗︿覆
+        pass
+    else:
+        question = str(question) if question is not None else ""
+
+    ragflow_config = conn.config.get("plugins", {}).get("search_from_ragflow", {})
+    base_url = ragflow_config.get("base_url", "")
+    api_key = ragflow_config.get("api_key", "")
+    dataset_ids = ragflow_config.get("dataset_ids", [])
+
+    url = base_url + "/api/v1/retrieval"
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+
+    # 纭繚payload涓殑瀛楃涓查兘鏄疷TF-8缂栫爜
+    payload = {"question": question, "dataset_ids": dataset_ids}
+
+    try:
+        # 浣跨敤ensure_ascii=False纭繚JSON搴忓垪鍖栨椂姝ｇ‘澶勭悊涓枃
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers,
+            timeout=5,
+            verify=False,
+        )
+
+        # 鏄惧紡璁剧疆鍝嶅簲鐨勭紪鐮佷负utf-8
+        response.encoding = "utf-8"
+
+        response.raise_for_status()
+
+        # 鍏堣幏鍙栨枃鏈唴瀹癸紝鐒跺悗鎵嬪姩澶勭悊JSON瑙ｇ爜
+        response_text = response.text
+        import json
+
+        result = json.loads(response_text)
+
+        if result.get("code") != 0:
+            error_detail = result.get("error", {}).get("detail", "鏈煡閿欒")
+            error_message = result.get("error", {}).get("message", "")
+            error_code = result.get("code", "")
+
+            # 瀹夊叏鍦拌褰曢敊璇俊鎭?            logger.bind(tag=TAG).error(
+                f"RAGFlow API璋冪敤澶辫触锛屽搷搴旂爜锛歿error_code}锛岄敊璇鎯咃細{error_detail}锛屽畬鏁村搷搴旓細{result}"
+            )
+
+            # 鏋勫缓璇︾粏鐨勯敊璇搷搴?            error_response = f"RAG鎺ュ彛杩斿洖寮傚父锛堥敊璇爜锛歿error_code}锛?
+
+            if error_message:
+                error_response += f"锛歿error_message}"
+            if error_detail:
+                error_response += f"\n璇︽儏锛歿error_detail}"
+
+            return ActionResponse(Action.RESPONSE, None, error_response)
+
+        chunks = result.get("data", {}).get("chunks", [])
+        contents = []
+        for chunk in chunks:
+            content = chunk.get("content", "")
+            if content:
+                # 瀹夊叏鍦板鐞嗗唴瀹瑰瓧绗︿覆
+                if isinstance(content, str):
+                    contents.append(content)
+                elif isinstance(content, bytes):
+                    contents.append(content.decode("utf-8", errors="replace"))
+                else:
+                    contents.append(str(content))
+
+        if contents:
+            # 缁勭粐鐭ヨ瘑搴撳唴瀹逛负寮曠敤妯″紡
+            context_text = f"# 鍏充簬闂銆恵question}銆戞煡鍒扮煡璇嗗簱濡備笅\n"
+            context_text += "```\n\n\n".join(contents[:5])
+            context_text += "\n```"
+        else:
+            context_text = "鏍规嵁鐭ヨ瘑搴撴煡璇㈢粨鏋滐紝娌℃湁鐩稿叧淇℃伅銆?
+        return ActionResponse(Action.REQLLM, context_text, None)
+
+    except requests.exceptions.RequestException as e:
+        # 缃戠粶璇锋眰寮傚父
+        error_type = type(e).__name__
+        logger.bind(tag=TAG).error(
+            f"RAGflow缃戠粶璇锋眰澶辫触锛屽紓甯哥被鍨嬶細{error_type}锛岃鎯咃細{str(e)}"
+        )
+
+        # 鏍规嵁寮傚父绫诲瀷鎻愪緵鏇磋缁嗙殑閿欒淇℃伅鍜岃В鍐虫柟妗?        if isinstance(e, requests.exceptions.ConnectTimeout):
+            error_response = "RAG鎺ュ彛杩炴帴瓒呮椂锛?绉掞級"
+            error_response += "\n鍙兘鍘熷洜锛歊AGflow鏈嶅姟鏈惎鍔ㄦ垨缃戠粶杩炴帴闂"
+            error_response += "\n瑙ｅ喅鏂规锛氳妫€鏌AGflow鏈嶅姟鐘舵€佸拰缃戠粶杩炴帴"
+
+        elif isinstance(e, requests.exceptions.ConnectionError):
+            error_response = "鏃犳硶杩炴帴鍒癛AG鎺ュ彛"
+            error_response += "\n鍙兘鍘熷洜锛歊AGflow鏈嶅姟鍦板潃閿欒鎴栨湇鍔℃湭杩愯"
+            error_response += "\n瑙ｅ喅鏂规锛氳妫€鏌AGflow鏈嶅姟鍦板潃閰嶇疆鍜屾湇鍔＄姸鎬?
+
+        elif isinstance(e, requests.exceptions.Timeout):
+            error_response = "RAG鎺ュ彛璇锋眰瓒呮椂"
+            error_response += "\n鍙兘鍘熷洜锛歊AGflow鏈嶅姟鍝嶅簲缂撴參鎴栫綉缁滃欢杩?
+            error_response += "\n瑙ｅ喅鏂规锛氳绋嶅悗閲嶈瘯鎴栨鏌AGflow鏈嶅姟鎬ц兘"
+
+        elif isinstance(e, requests.exceptions.HTTPError):
+            # 澶勭悊HTTP閿欒鐘舵€佺爜
+            if hasattr(e.response, "status_code"):
+                status_code = e.response.status_code
+                error_response = f"RAG鎺ュ彛HTTP閿欒锛堢姸鎬佺爜锛歿status_code}锛?
+
+                # 灏濊瘯鑾峰彇鍝嶅簲鍐呭涓殑閿欒淇℃伅
+                try:
+                    error_detail = e.response.json().get("error", {}).get("message", "")
+                    if error_detail:
+                        error_response += f"\n閿欒璇︽儏锛歿error_detail}"
+                except:
+                    pass
+            else:
+                error_response = f"RAG鎺ュ彛HTTP寮傚父锛歿str(e)}"
+
+        else:
+            error_response = f"RAG鎺ュ彛缃戠粶寮傚父锛坽error_type}锛夛細{str(e)}"
+
+        return ActionResponse(Action.RESPONSE, None, error_response)
+
+    except Exception as e:
+        # 鍏朵粬寮傚父
+        error_type = type(e).__name__
+        logger.bind(tag=TAG).error(
+            f"RAGflow澶勭悊寮傚父锛屽紓甯哥被鍨嬶細{error_type}锛岃鎯咃細{str(e)}"
+        )
+
+        # 鎻愪緵璇︾粏鐨勯敊璇俊鎭?        error_response = f"RAG鎺ュ彛澶勭悊寮傚父锛坽error_type}锛夛細{str(e)}"
+        return ActionResponse(Action.RESPONSE, None, error_response)
+

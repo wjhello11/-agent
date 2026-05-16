@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Clinical Safety Rules",
+  "type": "object",
+  "required": ["version", "rules"],
+  "properties": {
+    "version": {"type": "string"},
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "severity", "category", "if", "then", "evidence"],
+        "properties": {
+          "rule_id": {"type": "string"},
+          "severity": {"type": "string", "enum": ["block", "warn", "info"]},
+          "category": {"type": "string"},
+          "description": {"type": "string"},
+          "if": {"$ref": "#/$defs/conditionGroup"},
+          "then": {
+            "type": "object",
+            "required": ["action", "message"],
+            "properties": {
+              "action": {"type": "string", "enum": ["block", "warn", "inform"]},
+              "message": {"type": "string"},
+              "recommendation": {"type": "string"}
+            }
+          },
+          "evidence": {
+            "type": "object",
+            "required": ["source_title", "source_org", "evidence_level"],
+            "properties": {
+              "source_title": {"type": "string"},
+              "source_org": {"type": "string"},
+              "publish_year": {"type": "integer"},
+              "source_url": {"type": "string"},
+              "evidence_level": {"type": "string"},
+              "last_reviewed_at": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "conditionGroup": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/condition"}
+        },
+        "any": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/condition"}
+        },
+        "not": {"$ref": "#/$defs/condition"}
+      },
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "required": ["field", "operator", "values"],
+      "properties": {
+        "field": {"type": "string"},
+        "operator": {
+          "type": "string",
+          "enum": ["contains_any", "contains_all", "equals", "exists", "greater_than", "less_than"]
+        },
+        "values": {"type": "array"}
+      }
+    }
+  }
+}

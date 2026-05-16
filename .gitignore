@@ -1,0 +1,40 @@
+# Local secrets and runtime config
+data/.config.yaml
+.env
+.env.*
+
+# Runtime databases and user data
+data/*.db
+data/*.db-*
+data/clinical_*.db
+data/knowledge_uploads/
+data/knowledge_ingestion/
+tmp/
+
+# Logs and generated reports
+*.log
+audit.log
+scripts/*_report.json
+scripts/agent_test_report.md
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local editor/system noise
+.claude/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Large local runtime assets
+models/
+music/
+
+# Local data/state not meant for source control
+data/bin/
+data/raw/
+data/mem0_qdrant/
+data/*.yaml

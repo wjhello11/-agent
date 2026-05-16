@@ -1,0 +1,203 @@
+{
+  "version": "llmwiki_eval_v2",
+  "description": "Commercial-style LLMWiki routing evaluation set. It tests whether a user question routes to the expected wiki page slugs.",
+  "targets": {
+    "hit_at_4": 1.0,
+    "top1_accuracy": 0.75,
+    "mrr": 0.85
+  },
+  "cases": [
+    {
+      "id": "W01",
+      "category": "安全边界",
+      "question": "突然头晕冒汗是不是低血糖？",
+      "expected_slugs": ["diabetes-special-situations-and-red-flags"],
+      "top1_preferred": "diabetes-special-situations-and-red-flags",
+      "reference_intent": "识别低血糖风险和紧急处理边界。"
+    },
+    {
+      "id": "W02",
+      "category": "安全边界",
+      "question": "用胰岛素后吃饭要注意什么？",
+      "expected_slugs": ["diabetes-special-situations-and-red-flags"],
+      "top1_preferred": "diabetes-special-situations-and-red-flags",
+      "reference_intent": "胰岛素相关低血糖和进餐时机风险。"
+    },
+    {
+      "id": "W03",
+      "category": "安全边界",
+      "question": "血糖忽高忽低怎么回事？",
+      "expected_slugs": ["type-2-diabetes", "diabetes-special-situations-and-red-flags"],
+      "top1_preferred": "type-2-diabetes",
+      "reference_intent": "解释血糖波动和需要警惕的特殊情况。"
+    },
+    {
+      "id": "W04",
+      "category": "安全边界",
+      "question": "糖尿病合并痛风饮食怎么处理？",
+      "expected_slugs": ["diabetes-special-situations-and-red-flags", "type-2-diabetes"],
+      "top1_preferred": "diabetes-special-situations-and-red-flags",
+      "reference_intent": "合并疾病下避免单病种建议互相冲突。"
+    },
+    {
+      "id": "W05",
+      "category": "过敏",
+      "question": "花生酱会引起过敏吗？",
+      "expected_slugs": ["peanut-allergy"],
+      "top1_preferred": "peanut-allergy",
+      "reference_intent": "花生过敏和花生酱暴露。"
+    },
+    {
+      "id": "W06",
+      "category": "精确概念",
+      "question": "什么是血糖负荷 GL？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "解释 GL 概念。"
+    },
+    {
+      "id": "W07",
+      "category": "精确概念",
+      "question": "GI 和 GL 有什么区别？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "区分升糖指数和血糖负荷。"
+    },
+    {
+      "id": "W08",
+      "category": "精确概念",
+      "question": "MNT 对糖尿病有什么帮助？",
+      "expected_slugs": ["diabetes-medical-nutrition-therapy"],
+      "top1_preferred": "diabetes-medical-nutrition-therapy",
+      "reference_intent": "医学营养治疗的目标和价值。"
+    },
+    {
+      "id": "W09",
+      "category": "主题原则",
+      "question": "控糖饮食的总原则是什么？",
+      "expected_slugs": ["type-2-diabetes", "diabetes-medical-nutrition-therapy"],
+      "top1_preferred": "type-2-diabetes",
+      "reference_intent": "糖尿病饮食总原则。"
+    },
+    {
+      "id": "W10",
+      "category": "主题原则",
+      "question": "糖尿病前期需要控制饮食吗？",
+      "expected_slugs": ["type-2-diabetes"],
+      "top1_preferred": "type-2-diabetes",
+      "reference_intent": "糖尿病前期生活方式管理。"
+    },
+    {
+      "id": "W11",
+      "category": "主题原则",
+      "question": "糖尿病人每天能吃多少肉？",
+      "expected_slugs": ["diabetes-medical-nutrition-therapy", "type-2-diabetes"],
+      "top1_preferred": "diabetes-medical-nutrition-therapy",
+      "reference_intent": "蛋白质和肉类摄入建议。"
+    },
+    {
+      "id": "W12",
+      "category": "主题原则",
+      "question": "糖尿病患者饮食和运动怎么配合？",
+      "expected_slugs": ["diabetes-medical-nutrition-therapy", "type-2-diabetes"],
+      "top1_preferred": "diabetes-medical-nutrition-therapy",
+      "reference_intent": "饮食运动联合管理。"
+    },
+    {
+      "id": "W13",
+      "category": "碳水选择",
+      "question": "什么样的碳水不容易升糖？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "低 GI/GL 碳水选择。"
+    },
+    {
+      "id": "W14",
+      "category": "碳水选择",
+      "question": "全麦面包比白面包好在哪？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl", "common-breakfast-items"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "全谷物与白面包对升糖的差异。"
+    },
+    {
+      "id": "W15",
+      "category": "碳水选择",
+      "question": "低 GI 食物是不是可以随便吃？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "低 GI 不等于不限量。"
+    },
+    {
+      "id": "W16",
+      "category": "早餐场景",
+      "question": "早上来不及做饭吃什么方便？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide", "common-breakfast-items"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "糖尿病早餐快速选择。"
+    },
+    {
+      "id": "W17",
+      "category": "早餐场景",
+      "question": "早餐只喝一杯燕麦粥行不行？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "早餐搭配是否均衡。"
+    },
+    {
+      "id": "W18",
+      "category": "早餐场景",
+      "question": "白面包配鸡蛋牛奶行吗？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide", "common-breakfast-items"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "早餐食物组合评估。"
+    },
+    {
+      "id": "W19",
+      "category": "早餐场景",
+      "question": "超重的糖尿病患者怎么吃早餐？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide", "type-2-diabetes", "balanced-breakfast"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "糖尿病合并超重的早餐策略。"
+    },
+    {
+      "id": "W20",
+      "category": "早餐场景",
+      "question": "无糖豆浆加馒头适合控糖早餐吗？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide", "balanced-breakfast"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "常见中式早餐搭配。"
+    },
+    {
+      "id": "W21",
+      "category": "水果",
+      "question": "糖尿病人能吃水果吗，什么时候吃好？",
+      "expected_slugs": ["diabetes-carbohydrate-gi-gl", "type-2-diabetes"],
+      "top1_preferred": "diabetes-carbohydrate-gi-gl",
+      "reference_intent": "水果摄入时机和升糖影响。"
+    },
+    {
+      "id": "W22",
+      "category": "低血糖",
+      "question": "低血糖时先吃粗粮还是糖？",
+      "expected_slugs": ["diabetes-special-situations-and-red-flags"],
+      "top1_preferred": "diabetes-special-situations-and-red-flags",
+      "reference_intent": "低血糖时优先快速糖。"
+    },
+    {
+      "id": "W23",
+      "category": "体重管理",
+      "question": "糖尿病人想减肥，早餐怎么搭配？",
+      "expected_slugs": ["diabetes-breakfast-decision-guide", "type-2-diabetes"],
+      "top1_preferred": "diabetes-breakfast-decision-guide",
+      "reference_intent": "控糖和体重管理早餐。"
+    },
+    {
+      "id": "W24",
+      "category": "拒绝跑题",
+      "question": "糖尿病是不是只要不吃甜食就行？",
+      "expected_slugs": ["type-2-diabetes", "diabetes-medical-nutrition-therapy"],
+      "top1_preferred": "type-2-diabetes",
+      "reference_intent": "纠正只控甜食的片面理解。"
+    }
+  ]
+}

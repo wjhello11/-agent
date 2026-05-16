@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>临床营养师 Agent 控制台</title>
+    <link rel="stylesheet" href="./styles.css?v=20260504-ui5" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">AI</div>
+          <div>
+            <div class="brand-title">临床营养师 Agent</div>
+            <div class="brand-subtitle">Control Console</div>
+          </div>
+        </div>
+        <nav class="nav" id="nav"></nav>
+        <div class="sidebar-foot">
+          <div class="sidebar-foot-label">当前后端</div>
+          <div class="sidebar-foot-value">/console</div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">设备绑定用户</div>
+            <div class="page-title" id="page-title">设置</div>
+          </div>
+          <div class="topbar-actions">
+            <label class="field inline-field">
+              <span>设备 / 用户</span>
+              <select id="user-select"></select>
+            </label>
+            <button class="ghost-button" id="refresh-button" type="button">刷新数据</button>
+          </div>
+        </header>
+
+        <section class="summary-strip" id="summary-strip"></section>
+        <section id="toast-root" class="toast-root" aria-live="polite"></section>
+        <section id="page-content" class="page-content"></section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js?v=20260504-ui5"></script>
+  </body>
+</html>

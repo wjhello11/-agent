@@ -1,0 +1,635 @@
+{
+  "version": "2026-05-04",
+  "rules": [
+    {
+      "rule_id": "FDI_GRAPEFRUIT_CYP3A4_DRUGS",
+      "severity": "block",
+      "category": "drug_food_interaction",
+      "description": "Grapefruit may increase exposure to selected statins and calcium-channel blockers.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["grapefruit", "pomelo", "西柚", "葡萄柚"]},
+          {"field": "medications", "operator": "contains_any", "values": ["simvastatin", "atorvastatin", "nifedipine", "felodipine", "辛伐他汀", "阿托伐他汀", "硝苯地平", "非洛地平"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到西柚/葡萄柚与相关降脂药或降压药的潜在相互作用风险。",
+        "recommendation": "建议避免食用西柚或葡萄柚，并按医生或药师建议确认药物饮食禁忌。"
+      },
+      "evidence": {
+        "source_title": "Drug-food interaction clinical safety rule",
+        "source_org": "Internal clinical safety knowledge base",
+        "publish_year": 2026,
+        "evidence_level": "safety_rule",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "FDI_ALCOHOL_CEPHALOSPORIN_METRONIDAZOLE",
+      "severity": "block",
+      "category": "drug_food_interaction",
+      "description": "Alcohol with selected antimicrobials may trigger severe disulfiram-like reactions.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["alcohol", "beer", "wine", "baijiu", "酒", "啤酒", "白酒", "红酒"]},
+          {"field": "medications", "operator": "contains_any", "values": ["cephalosporin", "cefoperazone", "metronidazole", "头孢", "头孢哌酮", "甲硝唑"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到酒精与头孢类或甲硝唑相关用药的高风险组合。",
+        "recommendation": "用药期间及停药后一段时间避免饮酒，具体间隔以医生或药师建议为准。"
+      },
+      "evidence": {
+        "source_title": "Drug-food interaction clinical safety rule",
+        "source_org": "Internal clinical safety knowledge base",
+        "publish_year": 2026,
+        "evidence_level": "safety_rule",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "FDI_VITAMIN_K_WARFARIN",
+      "severity": "warn",
+      "category": "drug_food_interaction",
+      "description": "Large changes in high-vitamin-K food intake may affect warfarin anticoagulation.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["spinach", "pork liver", "菠菜", "猪肝", "绿叶菜"]},
+          {"field": "medications", "operator": "contains_any", "values": ["warfarin", "华法林"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到华法林与高维生素K食物相关的用药饮食管理风险。",
+        "recommendation": "不建议自行大幅改变绿叶菜或动物肝脏摄入量，需保持稳定并遵医嘱监测 INR。"
+      },
+      "evidence": {
+        "source_title": "Drug-food interaction clinical safety rule",
+        "source_org": "Internal clinical safety knowledge base",
+        "publish_year": 2026,
+        "evidence_level": "safety_rule",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "CKD_LOW_SODIUM_SALT_ACEI_ARB",
+      "severity": "block",
+      "category": "disease_food_medication_interaction",
+      "description": "Low-sodium salt may increase potassium load in CKD patients using ACEI or ARB drugs.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["low sodium salt", "potassium salt", "低钠盐", "高钾盐"]},
+          {"field": "diseases", "operator": "contains_any", "values": ["ckd", "chronic kidney disease", "renal insufficiency", "慢性肾脏病", "肾功能不全"]},
+          {"field": "medications", "operator": "contains_any", "values": ["acei", "arb", "enalapril", "losartan", "普利", "沙坦", "依那普利", "氯沙坦"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到慢性肾脏病、普利/沙坦类用药与低钠盐的高钾风险组合。",
+        "recommendation": "不要自行使用低钠盐或高钾盐，需先确认血钾和肾功能并咨询医生。"
+      },
+      "evidence": {
+        "source_title": "慢性肾脏病患者膳食指导",
+        "source_org": "National Health Commission of China",
+        "publish_year": 2017,
+        "evidence_level": "industry_standard",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "ALLERGY_PEANUT_EXPOSURE",
+      "severity": "block",
+      "category": "allergy_food_contraindication",
+      "description": "Known peanut allergy should block peanut-containing food advice.",
+      "if": {
+        "all": [
+          {"field": "allergies", "operator": "contains_any", "values": ["peanut", "花生"]},
+          {"field": "foods", "operator": "contains_any", "values": ["peanut", "peanut butter", "花生", "花生酱"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到用户花生过敏，当前食物包含或可能包含花生。",
+        "recommendation": "应排除该食物，并提醒用户查看配料表和交叉污染提示。"
+      },
+      "evidence": {
+        "source_title": "Allergy safety rule",
+        "source_org": "Internal clinical safety knowledge base",
+        "publish_year": 2026,
+        "evidence_level": "safety_rule",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "GOUT_ACUTE_HIGH_PURINE_FOOD",
+      "severity": "warn",
+      "category": "disease_food_contraindication",
+      "description": "High-purine foods should be restricted during acute gout risk periods.",
+      "if": {
+        "all": [
+          {"field": "diseases", "operator": "contains_any", "values": ["gout", "hyperuricemia", "痛风", "高尿酸血症"]},
+          {"field": "foods", "operator": "contains_any", "values": ["organ meat", "broth", "anchovy", "sardine", "动物内脏", "浓肉汤", "沙丁鱼"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到痛风或高尿酸背景下的高嘌呤食物风险。",
+        "recommendation": "建议限制高嘌呤食物，急性发作期尤其应避免，并结合医生建议管理尿酸。"
+      },
+      "evidence": {
+        "source_title": "高尿酸血症与痛风患者膳食指导",
+        "source_org": "National Health Commission of China",
+        "publish_year": 2017,
+        "evidence_level": "industry_standard",
+        "last_reviewed_at": "2026-04-24"
+      }
+    },
+    {
+      "rule_id": "GLUCOSE_HYPOGLYCEMIA_VALUE",
+      "severity": "block",
+      "category": "blood_glucose_urgent_safety",
+      "description": "Blood glucose below 3.9 mmol/L is a hypoglycemia safety red line.",
+      "if": {
+        "all": [
+          {"field": "blood_glucose_mmol_l", "operator": "less_than", "values": ["3.9"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到血糖低于 3.9 mmol/L，属于低血糖风险。",
+        "recommendation": "先暂停运动、开车和洗澡等活动，按低血糖处理原则尽快补充快速糖，并在好转后复测；如果意识不清、吞咽困难或反复低血糖，应立即寻求线下急救。"
+      },
+      "evidence": {
+        "source_title": "Treatment of Low Blood Sugar",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "GLUCOSE_HYPOGLYCEMIA_SYMPTOMS_WITH_DIABETES_MEDICATION",
+      "severity": "block",
+      "category": "blood_glucose_urgent_safety",
+      "description": "Hypoglycemia symptoms in a diabetes or glucose-lowering medication context should be treated as urgent until clarified.",
+      "if": {
+        "all": [
+          {"field": "symptoms", "operator": "contains_any", "values": ["hypoglycemia", "低血糖", "手抖", "冒汗", "心慌", "头晕", "意识模糊"]},
+          {
+            "any": [
+              {"field": "diseases", "operator": "contains_any", "values": ["diabetes", "糖尿病", "2型糖尿病"]},
+              {"field": "medications", "operator": "contains_any", "values": ["insulin", "胰岛素", "sulfonylurea", "磺脲", "格列齐特", "格列美脲"]}
+            ]
+          }
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到糖尿病或降糖药背景下的疑似低血糖症状。",
+        "recommendation": "先按低血糖风险处理，不要继续运动或开车；如果能安全吞咽，可尽快补充快速糖并观察复测，症状严重或不缓解时立即就医。"
+      },
+      "evidence": {
+        "source_title": "Treatment of Low Blood Sugar",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "GLUCOSE_HYPERGLYCEMIA_DKA_WARNING",
+      "severity": "block",
+      "category": "blood_glucose_urgent_safety",
+      "description": "Very high glucose with ketone or diabetic ketoacidosis symptoms requires urgent offline care.",
+      "if": {
+        "all": [
+          {"field": "blood_glucose_mmol_l", "operator": "greater_than", "values": ["13.9"]},
+          {"field": "symptoms", "operator": "contains_any", "values": ["dka", "ketone", "酮体", "酮症", "呕吐", "腹痛", "呼吸深快", "嗜睡", "脱水"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到明显高血糖并伴随酮症或脱水相关危险信号。",
+        "recommendation": "这不是单纯饮食建议能处理的情况，应尽快联系医生或急诊；在专业指导前不要自行大量运动降糖。"
+      },
+      "evidence": {
+        "source_title": "Diabetic Ketoacidosis",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "GLUCOSE_HYPERGLYCEMIA_VALUE_WARN",
+      "severity": "warn",
+      "category": "blood_glucose_safety",
+      "description": "Blood glucose above 13.9 mmol/L should trigger a strong follow-up and sick-day safety warning.",
+      "if": {
+        "all": [
+          {"field": "blood_glucose_mmol_l", "operator": "greater_than", "values": ["13.9"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到血糖明显偏高。",
+        "recommendation": "建议先补充无糖水、避免含糖饮料和高碳水加餐，并按既有医嘱复测；如果伴随呕吐、酮体阳性、明显脱水或精神差，应尽快就医。"
+      },
+      "evidence": {
+        "source_title": "Diabetic Ketoacidosis",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "DIABETES_SUGARY_DRINK",
+      "severity": "warn",
+      "category": "disease_food_contraindication",
+      "description": "Sugary drinks are high-risk daily foods for users with diabetes.",
+      "if": {
+        "all": [
+          {"field": "diseases", "operator": "contains_any", "values": ["diabetes", "糖尿病", "2型糖尿病"]},
+          {"field": "foods", "operator": "contains_any", "values": ["sugary drink", "milk tea", "soda", "juice", "奶茶", "含糖饮料", "可乐", "果汁", "蜂蜜水"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到糖尿病背景下的含糖饮料风险。",
+        "recommendation": "不建议作为日常饮品或正餐搭配；如确实要喝，应优先选择无糖/少糖、小份量，并结合当餐碳水和血糖情况。"
+      },
+      "evidence": {
+        "source_title": "Diabetes Meal Planning",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "CKD_HIGH_POTASSIUM_FOODS",
+      "severity": "warn",
+      "category": "disease_food_contraindication",
+      "description": "High-potassium foods should be restricted or individualized in CKD or renal insufficiency.",
+      "if": {
+        "all": [
+          {"field": "diseases", "operator": "contains_any", "values": ["ckd", "chronic kidney disease", "renal insufficiency", "慢性肾脏病", "肾功能不全", "肾病"]},
+          {"field": "foods", "operator": "contains_any", "values": ["banana", "orange", "kiwi", "avocado", "potato", "tomato", "coconut water", "dried fruit", "香蕉", "橙子", "猕猴桃", "牛油果", "土豆", "番茄", "椰子水", "果干"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到肾功能异常背景下的高钾食物风险。",
+        "recommendation": "这类食物是否能吃取决于血钾和肾功能，建议控制份量并优先按医生或营养师给出的钾限制执行。"
+      },
+      "evidence": {
+        "source_title": "Potassium and Chronic Kidney Disease",
+        "source_org": "National Kidney Foundation",
+        "publish_year": 2024,
+        "evidence_level": "patient_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "CKD_PHOSPHORUS_COLA_PROCESSED_MEAT",
+      "severity": "warn",
+      "category": "disease_food_contraindication",
+      "description": "Dark colas and processed meats may be high-phosphorus or additive-heavy choices in CKD.",
+      "if": {
+        "all": [
+          {"field": "diseases", "operator": "contains_any", "values": ["ckd", "chronic kidney disease", "renal insufficiency", "慢性肾脏病", "肾功能不全", "肾病"]},
+          {"field": "foods", "operator": "contains_any", "values": ["cola", "dark soda", "processed meat", "ham", "sausage", "bacon", "可乐", "加工肉", "火腿", "香肠", "腊肉", "培根", "午餐肉"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到肾功能异常背景下的高磷或含添加剂加工食品风险。",
+        "recommendation": "建议优先避开深色汽水和加工肉，尤其是在医生要求限制磷、钠或钾时。"
+      },
+      "evidence": {
+        "source_title": "Phosphorus and Your Diet",
+        "source_org": "National Kidney Foundation",
+        "publish_year": 2024,
+        "evidence_level": "patient_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "HYPERTENSION_HIGH_SODIUM_DAILY_FOODS",
+      "severity": "warn",
+      "category": "disease_food_contraindication",
+      "description": "High-sodium convenience foods should be flagged for hypertension.",
+      "if": {
+        "all": [
+          {"field": "diseases", "operator": "contains_any", "values": ["hypertension", "high blood pressure", "高血压", "血压高"]},
+          {"field": "foods", "operator": "contains_any", "values": ["instant noodles", "pickled", "processed meat", "ham", "sausage", "方便面", "泡面", "咸菜", "腌菜", "榨菜", "加工肉", "火腿", "香肠"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到高血压背景下的高钠食物风险。",
+        "recommendation": "建议减少这类食物频率和份量，优先选择少盐、少酱料、少加工的餐食。"
+      },
+      "evidence": {
+        "source_title": "Sodium and Food Sources",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "PREGNANCY_HIGH_RISK_FOODS",
+      "severity": "block",
+      "category": "population_food_safety",
+      "description": "Pregnancy should block common high-risk foods for foodborne illness.",
+      "if": {
+        "all": [
+          {"field": "populations", "operator": "contains_any", "values": ["pregnancy", "pregnant", "怀孕", "孕妇", "孕期"]},
+          {"field": "foods", "operator": "contains_any", "values": ["raw milk", "unpasteurized milk", "raw seafood", "sashimi", "raw oyster", "undercooked egg", "raw sprouts", "deli meat", "生牛奶", "未巴氏杀菌奶", "生鱼片", "刺身", "生蚝", "溏心蛋", "生豆芽", "冷切肉"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到孕期背景下的食源性疾病高风险食物。",
+        "recommendation": "建议避免生奶、未熟蛋、生食海鲜、生芽菜和未经充分加热的即食熟肉，优先选择彻底加热、来源可靠的食物。"
+      },
+      "evidence": {
+        "source_title": "Food Safety for Pregnant Women",
+        "source_org": "U.S. Food and Drug Administration",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "IMMUNOCOMPROMISED_RAW_HIGH_RISK_FOODS",
+      "severity": "block",
+      "category": "population_food_safety",
+      "description": "Immunocompromised or older-adult users should avoid common high-risk raw foods.",
+      "if": {
+        "all": [
+          {
+            "any": [
+              {"field": "diseases", "operator": "contains_any", "values": ["immunocompromised", "免疫低下", "免疫抑制", "化疗", "器官移植"]},
+              {"field": "populations", "operator": "contains_any", "values": ["older adult", "elderly", "老人", "老年人"]}
+            ]
+          },
+          {"field": "foods", "operator": "contains_any", "values": ["raw milk", "raw seafood", "sashimi", "raw oyster", "raw sprouts", "undercooked egg", "生牛奶", "生鱼片", "刺身", "生蚝", "生豆芽", "溏心蛋"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到免疫低下或老年人背景下的生食高风险食物。",
+        "recommendation": "建议避免这类生食或未充分加热食物，优先选择彻底加热后的安全食物。"
+      },
+      "evidence": {
+        "source_title": "People at Increased Risk for Food Poisoning",
+        "source_org": "Centers for Disease Control and Prevention",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FOOD_SAFETY_SPOILED_OR_MOLDY",
+      "severity": "block",
+      "category": "daily_food_safety",
+      "description": "Moldy, spoiled, expired, or room-temperature overnight foods should be blocked.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["moldy", "spoiled", "expired", "发霉", "霉了", "变质", "馊了", "异味", "过期", "常温过夜"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到食物可能发霉、变质、过期或常温放置过久。",
+        "recommendation": "不要尝味判断，也不建议削掉可见霉斑后继续吃；应直接丢弃，并注意清洁接触过的容器和刀具。"
+      },
+      "evidence": {
+        "source_title": "Molds on Food: Are They Dangerous?",
+        "source_org": "U.S. Department of Agriculture Food Safety and Inspection Service",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FDI_LEVOTHYROXINE_CALCIUM_IRON_SOY_COFFEE",
+      "severity": "warn",
+      "category": "drug_food_interaction",
+      "description": "Calcium, iron, soy, coffee, and dairy may interfere with levothyroxine absorption when taken together.",
+      "if": {
+        "all": [
+          {"field": "medications", "operator": "contains_any", "values": ["levothyroxine", "左甲状腺素", "优甲乐"]},
+          {"field": "foods", "operator": "contains_any", "values": ["milk", "dairy", "soy", "coffee", "calcium", "iron", "牛奶", "奶制品", "豆浆", "大豆", "咖啡", "钙片", "铁剂"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到左甲状腺素与钙、铁、豆制品、咖啡或奶制品同用的吸收影响风险。",
+        "recommendation": "建议按医嘱空腹固定时间服药，并与钙片、铁剂、奶制品、豆制品或咖啡错开；具体间隔以医生或药师建议为准。"
+      },
+      "evidence": {
+        "source_title": "Levothyroxine Drug Information",
+        "source_org": "MedlinePlus",
+        "publish_year": 2024,
+        "evidence_level": "drug_information",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FDI_QUINOLONE_TETRACYCLINE_DAIRY_MINERALS",
+      "severity": "warn",
+      "category": "drug_food_interaction",
+      "description": "Dairy and mineral supplements may reduce absorption of quinolone or tetracycline antibiotics.",
+      "if": {
+        "all": [
+          {"field": "medications", "operator": "contains_any", "values": ["quinolone", "ciprofloxacin", "levofloxacin", "tetracycline", "doxycycline", "喹诺酮", "环丙沙星", "左氧氟沙星", "四环素", "多西环素"]},
+          {"field": "foods", "operator": "contains_any", "values": ["milk", "dairy", "calcium", "iron", "zinc", "magnesium", "牛奶", "奶制品", "钙片", "铁剂", "锌片", "镁"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到喹诺酮或四环素类抗生素与奶制品、钙铁锌镁等矿物质同用的吸收影响风险。",
+        "recommendation": "不要和牛奶、钙片、铁剂、锌片等同一时间服用；具体错开时间以药品说明书、医生或药师建议为准。"
+      },
+      "evidence": {
+        "source_title": "Ciprofloxacin Drug Information",
+        "source_org": "MedlinePlus",
+        "publish_year": 2024,
+        "evidence_level": "drug_information",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FDI_MAOI_LINEZOLID_TYRAMINE",
+      "severity": "block",
+      "category": "drug_food_interaction",
+      "description": "MAOIs and linezolid have high-risk interactions with high-tyramine foods.",
+      "if": {
+        "all": [
+          {"field": "medications", "operator": "contains_any", "values": ["maoi", "linezolid", "单胺氧化酶抑制剂", "利奈唑胺"]},
+          {"field": "foods", "operator": "contains_any", "values": ["aged cheese", "fermented", "soy sauce", "processed meat", "beer", "陈年奶酪", "发酵食品", "酱油", "腊肉", "香肠", "啤酒"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到 MAOI 或利奈唑胺与高酪胺食物的高风险组合。",
+        "recommendation": "用药期间不要自行食用陈年奶酪、发酵食品、腌制加工肉、部分酒类等高酪胺食物；应按医生或药师给出的禁忌清单执行。"
+      },
+      "evidence": {
+        "source_title": "Linezolid Drug Information",
+        "source_org": "MedlinePlus",
+        "publish_year": 2024,
+        "evidence_level": "drug_information",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FDI_ALCOHOL_OPIOID_BENZODIAZEPINE_SLEEPING_PILL",
+      "severity": "block",
+      "category": "drug_alcohol_interaction",
+      "description": "Alcohol with opioids, benzodiazepines, or sleeping pills increases sedation and respiratory depression risk.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["alcohol", "beer", "wine", "baijiu", "酒", "啤酒", "白酒", "红酒"]},
+          {"field": "medications", "operator": "contains_any", "values": ["opioid", "benzodiazepine", "sleeping pill", "阿片", "吗啡", "羟考酮", "曲马多", "苯二氮卓", "地西泮", "阿普唑仑", "安眠药", "佐匹克隆", "唑吡坦"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到酒精与阿片类止痛药、苯二氮卓或安眠药同用的高风险组合。",
+        "recommendation": "不要饮酒；这类组合可能明显增加嗜睡、跌倒、呼吸抑制等风险。如已经同用并出现异常嗜睡、呼吸慢或意识不清，应立即就医。"
+      },
+      "evidence": {
+        "source_title": "Alcohol-Medication Interactions",
+        "source_org": "National Institute on Alcohol Abuse and Alcoholism",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "FDI_ALCOHOL_ACETAMINOPHEN_LIVER",
+      "severity": "warn",
+      "category": "drug_alcohol_interaction",
+      "description": "Alcohol with acetaminophen should trigger liver safety warning, especially in liver disease.",
+      "if": {
+        "all": [
+          {"field": "foods", "operator": "contains_any", "values": ["alcohol", "beer", "wine", "baijiu", "酒", "啤酒", "白酒", "红酒"]},
+          {"field": "medications", "operator": "contains_any", "values": ["acetaminophen", "paracetamol", "对乙酰氨基酚", "扑热息痛"]}
+        ]
+      },
+      "then": {
+        "action": "warn",
+        "message": "检测到酒精与对乙酰氨基酚同用的肝损伤风险。",
+        "recommendation": "用药期间不建议饮酒；如果有肝病、长期大量饮酒或需要连续服药，应先咨询医生或药师。"
+      },
+      "evidence": {
+        "source_title": "Alcohol-Medication Interactions",
+        "source_org": "National Institute on Alcohol Abuse and Alcoholism",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "ALLERGY_TREE_NUT_EXPOSURE",
+      "severity": "block",
+      "category": "allergy_food_contraindication",
+      "description": "Known tree nut allergy should block tree-nut-containing food advice.",
+      "if": {
+        "all": [
+          {"field": "allergies", "operator": "contains_any", "values": ["tree nut", "坚果", "杏仁", "腰果", "核桃"]},
+          {"field": "foods", "operator": "contains_any", "values": ["tree nut", "almond", "cashew", "walnut", "坚果", "杏仁", "腰果", "核桃"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到用户坚果过敏，当前食物包含或可能包含相关坚果。",
+        "recommendation": "应避免该食物，并检查配料表和交叉污染提示。"
+      },
+      "evidence": {
+        "source_title": "Have Food Allergies? Read the Label",
+        "source_org": "U.S. Food and Drug Administration",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "ALLERGY_SHELLFISH_EXPOSURE",
+      "severity": "block",
+      "category": "allergy_food_contraindication",
+      "description": "Known shellfish allergy should block shellfish-containing food advice.",
+      "if": {
+        "all": [
+          {"field": "allergies", "operator": "contains_any", "values": ["shellfish", "shrimp", "crab", "虾", "蟹", "贝类"]},
+          {"field": "foods", "operator": "contains_any", "values": ["shellfish", "shrimp", "crab", "clam", "虾", "蟹", "贝类", "蛤蜊"]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到用户甲壳类或贝类过敏，当前食物包含或可能包含相关过敏原。",
+        "recommendation": "应避免该食物，并检查配料表、汤底和交叉污染风险。"
+      },
+      "evidence": {
+        "source_title": "Have Food Allergies? Read the Label",
+        "source_org": "U.S. Food and Drug Administration",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    },
+    {
+      "rule_id": "ALLERGY_MILK_EGG_SOY_WHEAT_SESAME_FISH_EXPOSURE",
+      "severity": "block",
+      "category": "allergy_food_contraindication",
+      "description": "Known major food allergen exposure should block matching food advice.",
+      "if": {
+        "any": [
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["milk", "牛奶", "奶"]},
+            {"field": "foods", "operator": "contains_any", "values": ["milk", "dairy", "牛奶", "奶制品"]}
+          ]},
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["egg", "鸡蛋", "蛋"]},
+            {"field": "foods", "operator": "contains_any", "values": ["egg", "鸡蛋", "蛋"]}
+          ]},
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["soy", "大豆", "黄豆"]},
+            {"field": "foods", "operator": "contains_any", "values": ["soy", "soybean", "tofu", "豆浆", "大豆", "黄豆", "豆腐"]}
+          ]},
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["wheat", "gluten", "小麦", "麸质"]},
+            {"field": "foods", "operator": "contains_any", "values": ["wheat", "gluten", "小麦", "麸质", "面包", "面条"]}
+          ]},
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["sesame", "芝麻"]},
+            {"field": "foods", "operator": "contains_any", "values": ["sesame", "芝麻", "芝麻酱"]}
+          ]},
+          {"all": [
+            {"field": "allergies", "operator": "contains_any", "values": ["fish", "鱼"]},
+            {"field": "foods", "operator": "contains_any", "values": ["fish", "鱼", "鱼肉"]}
+          ]}
+        ]
+      },
+      "then": {
+        "action": "block",
+        "message": "检测到用户已知食物过敏与当前食物可能匹配。",
+        "recommendation": "应避免该食物，并查看配料表、调味料、汤底和交叉污染提示；如果已误食并出现呼吸困难、喉咙肿或全身风团，应立即急救。"
+      },
+      "evidence": {
+        "source_title": "Have Food Allergies? Read the Label",
+        "source_org": "U.S. Food and Drug Administration",
+        "publish_year": 2024,
+        "evidence_level": "public_health_guidance",
+        "last_reviewed_at": "2026-05-04"
+      }
+    }
+  ]
+}
